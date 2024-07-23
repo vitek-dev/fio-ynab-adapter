@@ -14,8 +14,7 @@ final readonly class YnabTargetRepository implements TargetRepository
         private string $budgetId,
         private string $accountId,
         private array  $payeeNameResolvers,
-    )
-    {
+    ) {
     }
 
     /**
@@ -62,14 +61,19 @@ final readonly class YnabTargetRepository implements TargetRepository
 
     private function resolvePayeeName(Transaction $transaction): string
     {
+        $payeeName = false;
+
         foreach ($this->payeeNameResolvers as $resolver) {
             $payeeName = $resolver->resolve($transaction);
 
             if ($payeeName !== false) {
-                return $payeeName;
+                break;
             }
         }
 
-        return $transaction->transactionType;
+        return mb_convert_case(
+            $payeeName ?: $transaction->transactionType,
+            MB_CASE_TITLE,
+        );
     }
 }
