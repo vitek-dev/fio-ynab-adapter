@@ -12,8 +12,7 @@ final readonly class FioSourceRepository implements SourceRepository
 
     public function __construct(
         private string $token,
-    )
-    {
+    ) {
     }
 
     /**
@@ -57,10 +56,10 @@ final readonly class FioSourceRepository implements SourceRepository
     /**
      * @throws \Exception
      */
-    private function mapTransaction(array $transaction): Transaction
+    private function mapTransaction(array $transaction): SourceTransaction
     {
-        return new Transaction(
-            transactionId: (int)$transaction['column22']['value'],
+        return new SourceTransaction(
+            transactionId: (string) $transaction['column22']['value'],
             transactionType: $transaction['column8']['value'],
             date: new DateTimeImmutable($transaction['column0']['value']),
             amount: (float)$transaction['column1']['value'],

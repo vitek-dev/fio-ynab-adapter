@@ -6,19 +6,15 @@ namespace App\Repository;
 
 final readonly class YnabTargetRepository implements TargetRepository
 {
-    /**
-     * @param \App\Payee\PayeeNameResolver[] $payeeNameResolvers
-     */
     public function __construct(
         private string $token,
         private string $budgetId,
         private string $accountId,
-        private array  $payeeNameResolvers,
     ) {
     }
 
     /**
-     * @param \App\Repository\Transaction[] $transactions
+     * @param \App\Repository\TargetTransaction[] $transactions
      * @throws \JsonException
      */
     public function pushTransactions(array $transactions): void
@@ -35,8 +31,8 @@ final readonly class YnabTargetRepository implements TargetRepository
                 'date' => $transaction->date->format('Y-m-d'),
                 'cleared' => $transaction->isCleared ? 'cleared' : 'uncleared',
                 'amount' => (int)($transaction->amount * 1000),
-                'payee_name' => ucfirst($this->resolvePayeeName($transaction)),
-                'memo' => $transaction->userIdentification,
+                'payee_name' => $transaction->payeeName,
+                'memo' => $transaction->note,
                 'import_id' => $transaction->transactionId,
             ];
         }
@@ -58,24 +54,6 @@ final readonly class YnabTargetRepository implements TargetRepository
                     ),
                 ],
             ]),
-        );
-    }
-
-    private function resolvePayeeName(Transaction $transaction): string
-    {
-        $payeeName = false;
-
-        foreach ($this->payeeNameResolvers as $resolver) {
-            $payeeName = $resolver->resolve($transaction);
-
-            if ($payeeName !== false) {
-                break;
-            }
-        }
-
-        return mb_convert_case(
-            $payeeName ?: $transaction->transactionType,
-            MB_CASE_TITLE,
         );
     }
 }

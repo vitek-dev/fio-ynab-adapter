@@ -6,7 +6,7 @@ namespace App;
 
 require_once __DIR__ . '/../config/env.php';
 
-use App\Payee\PayeeNameResolver;
+use App\Resolver\TransactionResolver;
 use App\Repository\FioSourceRepository;
 use App\Repository\SourceRepository;
 use App\Repository\TargetRepository;
@@ -19,35 +19,33 @@ class App
 
     private function __construct()
     {
-        $this->container[PayeeNameResolver::class] = [
-            new Payee\GoPay(),
-            new Payee\ComGate(),
-            new Payee\UserIdentificationMap(),
-
-            new Payee\CardPayment(), // Keep this one last
+        $this->container[TransactionResolver::class] = [
+            new Resolver\CardPayment(), // Keep this above other card payments
+            new Resolver\GoPay(),
+            new Resolver\ComGate(),
         ];
 
         $this->container[TargetRepository::class] =
         $this->container[YnabTargetRepository::class] = [
             new YnabTargetRepository(
-                YNAB_API_TOKEN,
-                YNAB_BUDGET_ID,
-                YNAB_ACCOUNT_ID,
-                $this->getServices(PayeeNameResolver::class),
+                token: YNAB_API_TOKEN,
+                budgetId: YNAB_BUDGET_ID,
+                accountId: YNAB_ACCOUNT_ID,
             ),
         ];
 
         $this->container[SourceRepository::class] =
         $this->container[FioSourceRepository::class] = [
             new FioSourceRepository(
-                FIO_API_TOKEN,
+                token: FIO_API_TOKEN,
             ),
         ];
 
         $this->container[AdapterService::class] = [
             new AdapterService(
-                $this->getService(SourceRepository::class),
-                $this->getService(TargetRepository::class),
+                sourceRepository: $this->getService(SourceRepository::class),
+                targetRepository: $this->getService(TargetRepository::class),
+                transactionResolvers: $this->getServices(TransactionResolver::class),
             ),
         ];
     }

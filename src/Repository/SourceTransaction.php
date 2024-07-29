@@ -6,17 +6,16 @@ namespace App\Repository;
 
 use DateTimeImmutable;
 
-final readonly class Transaction
+final readonly class SourceTransaction
 {
     public function __construct(
-        public int               $transactionId,
+        public string            $transactionId,
         public string            $transactionType,
         public DateTimeImmutable $date,
         public float             $amount,
         public ?string           $userIdentification = null,
         public bool              $isCleared = false,
-    )
-    {
+    ) {
         echo "Transaction found: {$this->amount} {$this->userIdentification}\n";
     }
 }

@@ -7,7 +7,7 @@ namespace App\Repository;
 interface SourceRepository
 {
     /**
-     * @return \App\Repository\Transaction[]
+     * @return \App\Repository\SourceTransaction[]
      */
     public function fetchTransactions(): array;
 }
