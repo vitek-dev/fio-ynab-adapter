@@ -14,6 +14,7 @@ final readonly class Transaction
         public DateTimeImmutable $date,
         public float             $amount,
         public ?string           $userIdentification = null,
+        public bool              $isCleared = false,
     )
     {
         echo "Transaction found: {$this->amount} {$this->userIdentification}\n";

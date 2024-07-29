@@ -18,6 +18,7 @@ final readonly class YnabTargetRepository implements TargetRepository
     }
 
     /**
+     * @param \App\Repository\Transaction[] $transactions
      * @throws \JsonException
      */
     public function pushTransactions(array $transactions): void
@@ -32,6 +33,7 @@ final readonly class YnabTargetRepository implements TargetRepository
             $data[] = [
                 'account_id' => $this->accountId,
                 'date' => $transaction->date->format('Y-m-d'),
+                'cleared' => $transaction->isCleared ? 'cleared' : 'uncleared',
                 'amount' => (int)($transaction->amount * 1000),
                 'payee_name' => ucfirst($this->resolvePayeeName($transaction)),
                 'memo' => $transaction->userIdentification,

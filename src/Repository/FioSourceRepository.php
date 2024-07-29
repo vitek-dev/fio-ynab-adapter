@@ -65,6 +65,7 @@ final readonly class FioSourceRepository implements SourceRepository
             date: new DateTimeImmutable($transaction['column0']['value']),
             amount: (float)$transaction['column1']['value'],
             userIdentification: $transaction['column7']['value'] ?? null,
+            isCleared: true,
         );
     }
 }
