@@ -61,6 +61,9 @@ final readonly class FioSourceRepository implements SourceRepository
         return new SourceTransaction(
             transactionId: (string) $transaction['column22']['value'],
             transactionType: $transaction['column8']['value'],
+            counterparty: isset($transaction['column2']['value'], $transaction['column3']['value']) ?
+                sprintf('%s/%s', $transaction['column2']['value'], $transaction['column3']['value']) :
+                null,
             date: new DateTimeImmutable($transaction['column0']['value']),
             amount: (float)$transaction['column1']['value'],
             userIdentification: $transaction['column7']['value'] ?? null,

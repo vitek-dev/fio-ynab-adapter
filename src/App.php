@@ -20,6 +20,7 @@ class App
     private function __construct()
     {
         $this->container[TransactionResolver::class] = [
+            new Resolver\BankTransfer(),
             new Resolver\CardPayment(), // Keep this above other card payments
             new Resolver\GoPay(),
             new Resolver\ComGate(),

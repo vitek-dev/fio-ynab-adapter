@@ -10,7 +10,6 @@ final class TargetTransaction
 {
     public function __construct(
         public string            $transactionId,
-        public string            $transactionType,
         public string            $payeeName,
         public DateTimeImmutable $date,
         public float             $amount,
@@ -23,7 +22,6 @@ final class TargetTransaction
     {
         return new self(
             transactionId: $transaction->transactionId,
-            transactionType: $transaction->transactionType,
             payeeName: $transaction->transactionType,
             date: $transaction->date,
             amount: $transaction->amount,
