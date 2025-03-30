@@ -8,7 +8,7 @@ use DateTimeImmutable;
 
 final readonly class FioSourceRepository implements SourceRepository
 {
-    private const string FIO_API_URL = 'https://www.fio.cz/ib_api/rest/last/%s/transactions.json';
+    private const string FIO_API_URL = 'https://fioapi.fio.cz/v1/rest/last/%s/transactions.json';
 
     public function __construct(
         private string $token,
