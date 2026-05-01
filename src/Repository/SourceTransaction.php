@@ -12,6 +12,7 @@ final readonly class SourceTransaction
         public string $transactionId,
         public string $transactionType,
         public ?string $counterparty,
+        public ?string $counterpartyName,
         public DateTimeImmutable $date,
         public float $amount,
         public ?string $userIdentification = null,
