@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    working_dir: /usr/src/app
+    user: docker
+    volumes:
+      - .:/usr/src/app
+    environment:
+      FIO_API_TOKEN: ${FIO_API_TOKEN}
+      YNAB_API_TOKEN: ${YNAB_API_TOKEN}
+      YNAB_BUDGET_ID: ${YNAB_BUDGET_ID}
+      YNAB_ACCOUNT_ID: ${YNAB_ACCOUNT_ID}
