@@ -18,6 +18,7 @@ final class TargetTransaction
     ) {
     }
 
+    #[\NoDiscard]
     public static function fromSource(SourceTransaction $transaction): self
     {
         return new self(

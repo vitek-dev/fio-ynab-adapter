@@ -7,7 +7,7 @@ namespace App\Resolver;
 use App\Repository\SourceTransaction;
 use App\Repository\TargetTransaction;
 
-class BankTransfer implements TransactionResolver
+final class BankTransfer implements TransactionResolver
 {
     private const array BANK_TRANSFER_TYPES = [
         'Okamžitá odchozí platba',
@@ -16,6 +16,7 @@ class BankTransfer implements TransactionResolver
         'Bezhotovostní příjem',
     ];
 
+    #[\Override]
     public function resolve(SourceTransaction $source, TargetTransaction $target): void
     {
         if (in_array($source->transactionType, self::BANK_TRANSFER_TYPES, true)) {

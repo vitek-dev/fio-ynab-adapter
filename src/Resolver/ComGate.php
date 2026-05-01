@@ -7,9 +7,10 @@ namespace App\Resolver;
 use App\Repository\SourceTransaction;
 use App\Repository\TargetTransaction;
 
-class ComGate implements TransactionResolver
+final class ComGate implements TransactionResolver
 {
     //Nákup: ComGate*Firma sro,  Adresa 123, Mesto, 123 45, CZE, dne 1.1.2024, částka  1000.00 CZK
+    #[\Override]
     public function resolve(SourceTransaction $source, TargetTransaction $target): void
     {
         if ($source->userIdentification && str_starts_with($source->userIdentification, 'Nákup: ComGate*')) {

@@ -51,36 +51,35 @@ class App
         ];
     }
 
+    #[\NoDiscard]
     public static function boot(): self
     {
         return new self();
     }
 
     /**
-     * @template T
-     * @param T $type
+     * @template T of object
+     * @param class-string<T> $type
      * @return T
      */
+    #[\NoDiscard]
     public function getService(string $type)
     {
-        $instances = $this->container[$type];
+        $instances = $this->container[$type] ?? [];
 
-        if (!$instances) {
-            throw new RuntimeException('No instances found');
-        }
-
-        if (count($instances) > 1) {
-            throw new RuntimeException('Multiple instances found');
-        }
-
-        return $instances[0];
+        return match (count($instances)) {
+            0 => throw new RuntimeException('No instances found'),
+            1 => array_first($instances),
+            default => throw new RuntimeException('Multiple instances found'),
+        };
     }
 
     /**
-     * @template T
-     * @param T $type
+     * @template T of object
+     * @param class-string<T> $type
      * @return array<T>
      */
+    #[\NoDiscard]
     public function getServices(string $type): array
     {
         return $this->container[$type];

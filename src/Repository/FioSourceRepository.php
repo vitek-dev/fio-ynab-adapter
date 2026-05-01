@@ -8,7 +8,8 @@ use DateTimeImmutable;
 
 final readonly class FioSourceRepository implements SourceRepository
 {
-    private const string FIO_API_URL = 'https://fioapi.fio.cz/v1/rest/last/%s/transactions.json';
+    private const string FETCH_URL = 'https://fioapi.fio.cz/v1/rest/last/%s/transactions.json';
+    private const string SET_LAST_ID_URL = 'https://fioapi.fio.cz/v1/rest/set-last-id/%s/%s/';
 
     public function __construct(
         private string $token,
@@ -16,23 +17,23 @@ final readonly class FioSourceRepository implements SourceRepository
     }
 
     /**
+     * @return list<SourceTransaction>
      * @throws \JsonException
      * @throws \Exception
      */
+    #[\Override]
+    #[\NoDiscard]
     public function fetchTransactions(): array
     {
-        return array_map(
-            fn(array $transaction) => $this->mapTransaction($transaction),
-            $this->makeRequest(),
-        );
+        return array_values(array_map($this->mapTransaction(...), $this->makeRequest()));
     }
 
     public function reset(int $lastId): void
     {
         file_get_contents(
             sprintf(
-                'https://fioapi.fio.cz/v1/rest/set-last-id/%s/%s/',
-                FIO_API_TOKEN,
+                self::SET_LAST_ID_URL,
+                $this->token,
                 $lastId,
             ),
         );
@@ -45,7 +46,7 @@ final readonly class FioSourceRepository implements SourceRepository
     {
         $response = file_get_contents(
             sprintf(
-                self::FIO_API_URL,
+                self::FETCH_URL,
                 $this->token,
             ),
         );

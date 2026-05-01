@@ -23,16 +23,12 @@ final readonly class AdapterService
 
     public function run(): void
     {
-        $transactions = $this->sourceRepository->fetchTransactions();
-
-        $target = [];
-        foreach ($transactions as $transaction) {
-            $target[] = $this->resolveTransaction($transaction);
-        }
-
-        $this->targetRepository->pushTransactions($target);
+        $this->sourceRepository->fetchTransactions()
+            |> (fn(array $transactions) => array_map($this->resolveTransaction(...), $transactions))
+            |> $this->targetRepository->pushTransactions(...);
     }
 
+    #[\NoDiscard]
     private function resolveTransaction(SourceTransaction $source): TargetTransaction
     {
         $target = TargetTransaction::fromSource($source);

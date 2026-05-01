@@ -6,6 +6,6 @@ namespace App\Repository;
 
 interface TargetRepository
 {
-    /** @param \App\Repository\TargetTransaction[] $transactions */
+    /** @param list<\App\Repository\TargetTransaction> $transactions */
     public function pushTransactions(array $transactions): void;
 }

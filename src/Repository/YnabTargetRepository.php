@@ -6,6 +6,8 @@ namespace App\Repository;
 
 final readonly class YnabTargetRepository implements TargetRepository
 {
+    private const string TRANSACTIONS_URL = 'https://api.youneedabudget.com/v1/budgets/%s/transactions';
+
     public function __construct(
         private string $token,
         private string $budgetId,
@@ -14,9 +16,10 @@ final readonly class YnabTargetRepository implements TargetRepository
     }
 
     /**
-     * @param \App\Repository\TargetTransaction[] $transactions
+     * @param list<\App\Repository\TargetTransaction> $transactions
      * @throws \JsonException
      */
+    #[\Override]
     public function pushTransactions(array $transactions): void
     {
         if (!$transactions) {
@@ -38,7 +41,7 @@ final readonly class YnabTargetRepository implements TargetRepository
         }
 
         file_get_contents(
-            sprintf('https://api.youneedabudget.com/v1/budgets/%s/transactions', $this->budgetId),
+            sprintf(self::TRANSACTIONS_URL, $this->budgetId),
             context: stream_context_create([
                 'http' => [
                     'method' => 'POST',
